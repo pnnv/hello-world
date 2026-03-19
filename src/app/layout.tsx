@@ -45,6 +45,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
         style={{ fontFamily: "var(--font-inter), Inter, system-ui, sans-serif" }}
+        suppressHydrationWarning
       >
         <ThemeRegistry>
           {children}
