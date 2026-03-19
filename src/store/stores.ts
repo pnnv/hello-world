@@ -1,5 +1,5 @@
 // ===== Zustand Stores =====
-// Central state management for VidyaMind
+// Central state management for ScoreCraft
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";

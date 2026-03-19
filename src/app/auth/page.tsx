@@ -89,9 +89,9 @@ export default function AuthPage() {
                         <Sparkles size={20} color="white" />
                     </Avatar>
                     <Typography variant="h5" fontWeight={700} color="text.primary">
-                        Vidya<span className="gradient-text">Mind</span>
+                        Score<span className="gradient-text">Craft</span>
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">Cognitive Learning OS</Typography>
+                    <Typography variant="caption" color="text.secondary">AI Learning Platform</Typography>
                 </Box>
 
                 <Card>
@@ -187,7 +187,7 @@ export default function AuthPage() {
                                         What are you preparing for?
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                        VidyaMind will personalize everything for your exam.
+                                        ScoreCraft will personalize everything for your exam.
                                     </Typography>
 
                                     <Grid container spacing={2} sx={{ mb: 3 }}>
@@ -244,7 +244,7 @@ export default function AuthPage() {
                 </Card>
 
                 <Typography variant="caption" align="center" display="block" sx={{ mt: 3, color: "text.secondary" }}>
-                    VidyaMind — Cognitive Learning OS
+                    ScoreCraft — AI Learning Platform
                 </Typography>
             </motion.div>
         </Box>

@@ -1,4 +1,4 @@
-// ===== VidyaMind Prompt Templates =====
+// ===== ScoreCraft Prompt Templates =====
 
 export const PROMPTS = {
   // Knowledge Graph Extraction from text
@@ -38,7 +38,7 @@ CONTENT TO ANALYZE:
 `,
 
   // Socratic Tutor System Prompt
-  SOCRATIC_TUTOR: `You are VidyaMind, an expert Socratic tutor. Your teaching philosophy:
+  SOCRATIC_TUTOR: `You are ScoreCraft, an expert AI tutor. Your teaching philosophy:
 
 1. NEVER give direct answers immediately. Guide the student through discovery.
 2. Ask probing questions that lead to understanding.

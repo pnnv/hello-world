@@ -1,8 +1,8 @@
-# VidyaMind — Cognitive Learning OS
+# ScoreCraft — AI Learning Platform
 
-> AI-powered personalized learning platform with knowledge graph tutoring, Bayesian mastery tracking, rubric-aware grading, and multilingual support — built for every student in India.
+> AI-powered personalized learning platform with intelligent tutoring, progress tracking, rubric-aware grading, and adaptive study planning — designed to help you master any subject.
 
-![VidyaMind](https://img.shields.io/badge/VidyaMind-Cognitive%20Learning%20OS-7C8CF5?style=for-the-badge)
+![ScoreCraft](https://img.shields.io/badge/ScoreCraft-AI%20Learning%20Platform-7C8CF5?style=for-the-badge)
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)
 ![Groq](https://img.shields.io/badge/Groq-Llama%203.3-orange?style=flat-square)
@@ -11,9 +11,9 @@
 
 ## 📖 Overview
 
-VidyaMind is an AI-powered educational platform designed to help Indian students prepare for competitive exams (JEE, NEET, UPSC, CLAT, etc.). It combines knowledge graph-based tutoring, Bayesian mastery tracking, rubric-aware grading, and spaced repetition scheduling into a unified learning experience.
+ScoreCraft is an AI-powered learning platform designed to help students prepare for competitive exams (JEE, NEET, CLAT) and master any academic subject. It combines knowledge graph-based tutoring, intelligent progress tracking, rubric-aware grading, and adaptive study planning into a unified learning experience.
 
-The platform uses **Groq's inference API** to run open-source LLMs (Llama 3.3 70B) for real-time AI tutoring, evaluation, and quiz generation.
+The platform uses **Groq's inference API** to run open-source LLMs (Llama 3.3 70B) for real-time AI tutoring, evaluation, and personalized learning recommendations.
 
 ---
 
@@ -225,12 +225,12 @@ This project uses **Groq** (groq.com) — an LLM inference platform — not **Gr
 
 ## 🎨 Design System
 
-VidyaMind uses a **soft pastel Material UI theme** with:
-- **Primary:** Soft Lavender (`#7C8CF5`)
-- **Secondary:** Soft Pink (`#F5A8C8`)
-- **Background:** Near-white with blue tint (`#FAFBFE`)
-- **Flat design** — no gradients, minimal shadows
-- **Clean typography** with Inter font family
+ScoreCraft uses a **modern minimalist Material UI theme** with:
+- **Primary Accent:** Lavender (`#7C8CF5`)
+- **Background:** Clean white (`#FFFFFF` / `#FAFBFC`)
+- **Text:** Dark slate for contrast (`#1A1D2E`)
+- **Flat design** — no gradients, solid colors with subtle shadows
+- **Clean typography** with Inter font family and optimized spacing
 
 ---
 
@@ -256,6 +256,6 @@ This project is for educational purposes. The AI models (Llama 3.3) are used und
 ---
 
 <p align="center">
-  <strong>VidyaMind</strong> — The Cognitive Learning Operating System<br/>
-  <em>Built with ❤️ for every student in India</em>
+  <strong>ScoreCraft</strong> — Your Intelligent Learning Platform<br/>
+  <em>AI-powered education for every learner</em>
 </p>

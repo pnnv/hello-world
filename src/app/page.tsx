@@ -104,20 +104,20 @@ export default function LandingPage() {
                 color: "text.primary",
               }}
             >
-              Vidya<span className="gradient-text">Mind</span>
+              Score<span className="gradient-text">Craft</span>
             </Typography>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
               <Typography variant="h5" sx={{ color: "text.secondary", fontWeight: 300, mb: 2, letterSpacing: "0.02em" }}>
-                The Cognitive Learning Operating System
+                Your Intelligent AI Learning Companion
               </Typography>
             </motion.div>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
               <Typography variant="body1" sx={{ color: "text.secondary", maxWidth: 560, mx: "auto", mb: 5, lineHeight: 1.7 }}>
-                AI-powered personalized tutoring with knowledge graph diagnosis,
-                Bayesian mastery tracking, rubric-aware grading, and multilingual
-                voice — built for every student in India.
+                Master any subject with AI-powered tutoring, intelligent study planning,
+                real-time progress tracking, and personalized learning paths designed
+                to help you achieve your academic goals.
               </Typography>
             </motion.div>
 
@@ -173,11 +173,11 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
           >
             <Typography variant="h3" align="center" sx={{ fontWeight: 700, mb: 2, letterSpacing: "-0.01em", color: "text.primary" }}>
-              Every Learning Path, <span className="gradient-text">One Platform</span>
+              Powerful Features for <span className="gradient-text">Smart Learning</span>
             </Typography>
             <Typography variant="body2" align="center" sx={{ color: "text.secondary", maxWidth: 480, mx: "auto", mb: 8 }}>
-              VidyaMind integrates multiple learning paths into a unified
-              cognitive learning experience powered by AI.
+              ScoreCraft combines AI tutoring, progress tracking, and personalized
+              study plans into one intelligent learning platform.
             </Typography>
           </motion.div>
 
@@ -225,10 +225,10 @@ export default function LandingPage() {
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 5 }}>
             {[
-              { step: "01", title: "Upload Your Syllabus", desc: "Drop a PDF or paste your syllabus. VidyaMind auto-generates a knowledge graph of concepts with prerequisite chains." },
-              { step: "02", title: "Learn with AI Tutor", desc: "Click any concept on the graph. The Socratic AI tutor guides you with hints, questions, and culturally-adapted analogies." },
-              { step: "03", title: "Track Your Mastery", desc: "Bayesian Knowledge Tracing updates your mastery in real-time. See your exam readiness score and optimized study schedule." },
-              { step: "04", title: "Get Graded & Improve", desc: "Submit essays or code for rubric-decomposed feedback. Academic integrity tools help you cite properly." },
+              { step: "01", title: "Upload Your Syllabus", desc: "Drop a PDF or paste your syllabus. ScoreCraft auto-generates a knowledge graph of concepts with prerequisite chains." },
+              { step: "02", title: "Learn with AI Tutor", desc: "Click any concept on the graph. The AI tutor guides you with personalized hints, questions, and clear explanations." },
+              { step: "03", title: "Track Your Progress", desc: "Real-time progress tracking shows your mastery level. Get personalized study recommendations and optimal study schedules." },
+              { step: "04", title: "Get Feedback & Improve", desc: "Submit assignments for intelligent feedback. Get criterion-by-criterion analysis with actionable improvement suggestions." },
             ].map((item, i) => (
               <motion.div
                 key={item.step}
@@ -275,8 +275,8 @@ export default function LandingPage() {
       <Divider />
       <Box component="footer" sx={{ py: 4, px: 3, textAlign: "center" }}>
         <Typography variant="caption" color="text.secondary">
-          VidyaMind — The Cognitive Learning Operating System ·{" "}
-          <span className="gradient-text" style={{ fontWeight: 500 }}>AI in Education & Skilling</span>
+          ScoreCraft — Your Intelligent Learning Platform ·{" "}
+          <span className="gradient-text" style={{ fontWeight: 500 }}>AI-Powered Education</span>
         </Typography>
       </Box>
     </Box>

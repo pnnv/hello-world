@@ -89,10 +89,10 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                             transition={{ duration: 0.2 }}
                         >
                             <Typography variant="subtitle1" fontWeight={700} color="text.primary" lineHeight={1.2}>
-                                VidyaMind
+                                ScoreCraft
                             </Typography>
                             <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.625rem" }}>
-                                Cognitive Learning OS
+                                AI Learning Platform
                             </Typography>
                         </motion.div>
                     )}

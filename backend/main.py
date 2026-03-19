@@ -1,4 +1,4 @@
-# ===== VidyaMind Python Backend =====
+# ===== ScoreCraft Python Backend =====
 # FastAPI application entry point.
 #
 # Start the server with:
@@ -35,8 +35,8 @@ from routers import tutor, evaluate, quiz, generate_kg, integrity, study_plan
 # Create the FastAPI application
 # ---------------------------------------------------------------------------
 app = FastAPI(
-    title="VidyaMind API",
-    description="Python backend for VidyaMind — Cognitive Learning OS",
+    title="ScoreCraft API",
+    description="Python backend for ScoreCraft — AI Learning Platform",
     version="1.0.0",
 )
 
@@ -70,4 +70,4 @@ app.include_router(study_plan.router)    # POST /api/ai/study-plan
 @app.get("/api/health")
 async def health_check():
     """Simple health check to verify the backend is running."""
-    return {"status": "ok", "service": "VidyaMind Python Backend"}
+    return {"status": "ok", "service": "ScoreCraft Python Backend"}
