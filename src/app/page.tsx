@@ -302,7 +302,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-8 px-6 text-center" style={{ borderTop: "1px solid var(--vm-border)" }}>
         <p className="text-xs" style={{ color: "var(--vm-text-muted)" }}>
-          VidyaMind — The Cognitive Learning Operating System Â·{" "}
+          VidyaMind — The Cognitive Learning Operating System ·{" "}
           <span className="gradient-text font-medium">AI in Education & Skilling</span>
         </p>
       </footer>
