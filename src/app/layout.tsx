@@ -16,9 +16,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VidyaMind — Cognitive Learning OS",
+  title: "ScoreCraft — AI Learning Platform",
   description:
-    "AI-powered personalized learning platform with knowledge graph tutoring, mastery tracking, rubric-aware grading, and multilingual support.",
+    "AI-powered personalized learning platform with knowledge graph tutoring, mastery tracking, rubric-aware grading, and intelligent study planning.",
   keywords: [
     "AI tutor",
     "knowledge graph",
@@ -45,6 +45,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
         style={{ fontFamily: "var(--font-inter), Inter, system-ui, sans-serif" }}
+        suppressHydrationWarning
       >
         <ThemeRegistry>
           {children}

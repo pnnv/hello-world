@@ -1,4 +1,4 @@
-# ===== VidyaMind Prompt Templates =====
+# ===== ScoreCraft Prompt Templates =====
 # All LLM prompt templates and default evaluation rubrics.
 # These are the exact same prompts used by the TypeScript backend,
 # ported line-for-line into Python string constants.
@@ -47,7 +47,7 @@ PROMPTS = {
 
     # ------ Socratic Tutor system prompt ------
     "SOCRATIC_TUTOR": (
-        "You are VidyaMind, an expert Socratic tutor. Your teaching philosophy:\n\n"
+        "You are ScoreCraft, an expert AI tutor. Your teaching philosophy:\n\n"
         "1. NEVER give direct answers immediately. Guide the student through discovery.\n"
         "2. Ask probing questions that lead to understanding.\n"
         "3. Break complex concepts into digestible steps.\n"
