@@ -51,9 +51,7 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* Scroll behavior handled via data-scroll-behavior attribute in layout.tsx */
 
 body {
   background: var(--vm-bg-primary);
