@@ -3,7 +3,21 @@
 import { useEvalStore } from "@/store/stores";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { FileCheck, Code, FileText, FlaskConical, Shield, ChevronRight, Sparkles, AlertTriangle, CheckCircle } from "lucide-react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import LinearProgress from "@mui/material/LinearProgress";
+import Chip from "@mui/material/Chip";
+import Alert from "@mui/material/Alert";
+import Grid from "@mui/material/Grid";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import { FileCheck, Code, FileText, FlaskConical, Shield, Sparkles } from "lucide-react";
 
 type SubmissionType = "essay" | "code" | "lab";
 
@@ -30,111 +44,178 @@ export default function EvaluatePage() {
 
     const getScoreColor = (score: number, max: number) => {
         const pct = (score / max) * 100;
-        if (pct >= 80) return "#10b981";
-        if (pct >= 60) return "#f59e0b";
-        return "#ef4444";
+        if (pct >= 80) return "success.main";
+        if (pct >= 60) return "warning.main";
+        return "error.main";
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-6">
-            <div><h1 className="text-2xl font-bold text-white">Evaluate</h1><p className="text-gray-500 text-sm mt-1">Submit essays, code, or lab reports for rubric-aware feedback</p></div>
+        <Box sx={{ maxWidth: 1200, mx: "auto" }}>
+            <Box sx={{ mb: 3 }}>
+                <Typography variant="h5" fontWeight={700} color="text.primary">Evaluate</Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>Submit essays, code, or lab reports for rubric-aware feedback</Typography>
+            </Box>
 
-            <div className="flex gap-6">
+            <Grid container spacing={3}>
                 {/* Input Panel */}
-                <div className="flex-1 space-y-4">
-                    {/* Type Selector */}
-                    <div className="flex gap-2">
-                        {([{ id: "essay", icon: FileText, label: "Essay" }, { id: "code", icon: Code, label: "Code" }, { id: "lab", icon: FlaskConical, label: "Lab Report" }] as const).map((t) => (
-                            <button key={t.id} onClick={() => { setType(t.id); reset(); }} className={`type-tab ${type === t.id ? 'active' : 'inactive'}`}>
-                                <t.icon className="w-4 h-4" />{t.label}
-                            </button>
-                        ))}
-                    </div>
+                <Grid size={{ xs: 12, md: 7 }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        {/* Type Selector */}
+                        <ToggleButtonGroup
+                            value={type}
+                            exclusive
+                            onChange={(_, v) => { if (v) { setType(v); reset(); } }}
+                            sx={{ "& .MuiToggleButton-root": { borderRadius: 2, px: 2, py: 1, textTransform: "none", fontSize: "0.8125rem", gap: 1 } }}
+                        >
+                            <ToggleButton value="essay"><FileText size={16} />Essay</ToggleButton>
+                            <ToggleButton value="code"><Code size={16} />Code</ToggleButton>
+                            <ToggleButton value="lab"><FlaskConical size={16} />Lab Report</ToggleButton>
+                        </ToggleButtonGroup>
 
-                    {/* Code-specific fields */}
-                    {type === "code" && (
-                        <div className="flex gap-3">
-                            <input value={problem} onChange={(e) => setProblem(e.target.value)} placeholder="Problem statement (optional)" className="flex-1 bg-[var(--vm-bg-primary)] border border-[var(--vm-border)] rounded-xl px-4 py-2.5 text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-blue-500/50" />
-                            <select value={codeLang} onChange={(e) => setCodeLang(e.target.value)} className="bg-[var(--vm-bg-primary)] border border-[var(--vm-border)] rounded-xl px-3 py-2.5 text-sm text-gray-300 focus:outline-none">
-                                <option value="python">Python</option><option value="javascript">JavaScript</option><option value="java">Java</option><option value="cpp">C++</option>
-                            </select>
-                        </div>
-                    )}
+                        {type === "code" && (
+                            <Box sx={{ display: "flex", gap: 2 }}>
+                                <TextField value={problem} onChange={(e) => setProblem(e.target.value)} placeholder="Problem statement (optional)" fullWidth size="small" />
+                                <Select value={codeLang} onChange={(e) => setCodeLang(e.target.value)} size="small" sx={{ minWidth: 120 }}>
+                                    <MenuItem value="python">Python</MenuItem>
+                                    <MenuItem value="javascript">JavaScript</MenuItem>
+                                    <MenuItem value="java">Java</MenuItem>
+                                    <MenuItem value="cpp">C++</MenuItem>
+                                </Select>
+                            </Box>
+                        )}
 
-                    {/* Submission Input */}
-                    <div className="glass-card p-1">
-                        <textarea value={submission} onChange={(e) => setSubmission(e.target.value)} placeholder={type === "code" ? "Paste your code here..." : type === "lab" ? "Paste your lab report..." : "Paste your essay here..."} className="w-full h-80 bg-transparent p-4 text-sm text-gray-300 placeholder-gray-600 resize-none focus:outline-none font-mono" />
-                    </div>
+                        <Card>
+                            <textarea
+                                value={submission} onChange={(e) => setSubmission(e.target.value)}
+                                placeholder={type === "code" ? "Paste your code here..." : type === "lab" ? "Paste your lab report..." : "Paste your essay here..."}
+                                style={{
+                                    width: "100%", height: 320, padding: 16, fontSize: 14, resize: "none",
+                                    background: "transparent", border: "none", outline: "none", color: "#2D3142",
+                                    fontFamily: type === "code" ? "monospace" : "inherit",
+                                }}
+                            />
+                        </Card>
 
-                    <button onClick={handleEvaluate} disabled={!submission.trim() || isEvaluating} className="btn-primary w-full py-3 rounded-xl font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                        {isEvaluating ? (<><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Evaluating...</>) : (<><FileCheck className="w-5 h-5" />Evaluate with Rubric</>)}
-                    </button>
-                </div>
+                        <Button
+                            variant="contained" fullWidth onClick={handleEvaluate}
+                            disabled={!submission.trim() || isEvaluating}
+                            startIcon={isEvaluating ? undefined : <FileCheck size={18} />}
+                            sx={{ py: 1.5 }}
+                        >
+                            {isEvaluating ? "Evaluating..." : "Evaluate with Rubric"}
+                        </Button>
+                    </Box>
+                </Grid>
 
                 {/* Results Panel */}
-                <div className="w-96 space-y-4">
-                    {lastResult && (
-                        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="glass-card p-5 space-y-4">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold text-white">Rubric Results</h3>
-                                <div className="text-2xl font-bold" style={{ color: getScoreColor(lastResult.overallScore, 100) }}>{lastResult.overallScore}<span className="text-sm text-gray-500">/100</span></div>
-                            </div>
+                <Grid size={{ xs: 12, md: 5 }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        {lastResult && (
+                            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                                <Card>
+                                    <CardContent sx={{ p: 3 }}>
+                                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+                                            <Typography variant="subtitle1" fontWeight={600}>Rubric Results</Typography>
+                                            <Typography variant="h5" fontWeight={700} sx={{ color: getScoreColor(lastResult.overallScore, 100) }}>
+                                                {lastResult.overallScore}<Typography component="span" variant="body2" color="text.secondary">/100</Typography>
+                                            </Typography>
+                                        </Box>
 
-                            {/* Criteria Bars */}
-                            <div className="space-y-3">
-                                {lastResult.criteria.map((c) => (
-                                    <div key={c.name}>
-                                        <div className="flex justify-between text-xs mb-1"><span className="text-gray-400">{c.name}</span><span style={{ color: getScoreColor(c.score, c.maxScore) }}>{c.score}/{c.maxScore}</span></div>
-                                        <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
-                                            <motion.div initial={{ width: 0 }} animate={{ width: `${(c.score / c.maxScore) * 100}%` }} transition={{ duration: 0.5 }} className="h-full rounded-full" style={{ backgroundColor: getScoreColor(c.score, c.maxScore) }} />
-                                        </div>
-                                        <p className="text-xs text-gray-500 mt-1">{c.suggestion}</p>
-                                    </div>
-                                ))}
-                            </div>
+                                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                            {lastResult.criteria.map((c) => (
+                                                <Box key={c.name}>
+                                                    <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
+                                                        <Typography variant="caption" color="text.secondary">{c.name}</Typography>
+                                                        <Typography variant="caption" sx={{ color: getScoreColor(c.score, c.maxScore) }}>{c.score}/{c.maxScore}</Typography>
+                                                    </Box>
+                                                    <LinearProgress variant="determinate" value={(c.score / c.maxScore) * 100}
+                                                        sx={{ height: 6, borderRadius: 3, bgcolor: "#F0F1F5", "& .MuiLinearProgress-bar": { bgcolor: getScoreColor(c.score, c.maxScore) } }} />
+                                                    <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>{c.suggestion}</Typography>
+                                                </Box>
+                                            ))}
+                                        </Box>
 
-                            {/* Strengths & Improvements */}
-                            {lastResult.strengths?.length > 0 && (
-                                <div><p className="text-xs text-emerald-400 font-medium mb-1">✦ Strengths</p>
-                                    {lastResult.strengths.map((s, i) => (<p key={i} className="text-xs text-gray-400 ml-3">• {s}</p>))}
-                                </div>
-                            )}
-                            {lastResult.improvements?.length > 0 && (
-                                <div><p className="text-xs text-amber-400 font-medium mb-1">⚡ Improvements</p>
-                                    {lastResult.improvements.map((s, i) => (<p key={i} className="text-xs text-gray-400 ml-3">• {s}</p>))}
-                                </div>
-                            )}
-                            <p className="text-xs text-gray-400 border-t border-[var(--vm-border)] pt-3">{lastResult.overallFeedback}</p>
-                        </motion.div>
-                    )}
+                                        {lastResult.strengths?.length > 0 && (
+                                            <Box sx={{ mt: 2 }}>
+                                                <Typography variant="caption" sx={{ color: "success.main", fontWeight: 600 }}>✦ Strengths</Typography>
+                                                {lastResult.strengths.map((s, i) => <Typography key={i} variant="caption" color="text.secondary" sx={{ display: "block", ml: 1.5 }}>• {s}</Typography>)}
+                                            </Box>
+                                        )}
+                                        {lastResult.improvements?.length > 0 && (
+                                            <Box sx={{ mt: 1 }}>
+                                                <Typography variant="caption" sx={{ color: "warning.dark", fontWeight: 600 }}>⚡ Improvements</Typography>
+                                                {lastResult.improvements.map((s, i) => <Typography key={i} variant="caption" color="text.secondary" sx={{ display: "block", ml: 1.5 }}>• {s}</Typography>)}
+                                            </Box>
+                                        )}
+                                        <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 2, pt: 2, borderTop: 1, borderColor: "divider" }}>
+                                            {lastResult.overallFeedback}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </motion.div>
+                        )}
 
-                    {/* Integrity Report */}
-                    {lastIntegrity && (
-                        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="glass-card p-5 space-y-3">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-sm font-semibold text-white flex items-center gap-2"><Shield className="w-4 h-4" />Integrity Report</h3>
-                                <div className={`text-lg font-bold ${lastIntegrity.originalityScore >= 80 ? "text-emerald-400" : lastIntegrity.originalityScore >= 60 ? "text-amber-400" : "text-red-400"}`}>{lastIntegrity.originalityScore}%</div>
-                            </div>
+                        {lastIntegrity && (
+                            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+                                <Card>
+                                    <CardContent sx={{ p: 3 }}>
+                                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+                                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                <Shield size={16} />
+                                                <Typography variant="subtitle2" fontWeight={600}>Integrity Report</Typography>
+                                            </Box>
+                                            <Typography variant="h6" fontWeight={700}
+                                                sx={{ color: lastIntegrity.originalityScore >= 80 ? "success.main" : lastIntegrity.originalityScore >= 60 ? "warning.main" : "error.main" }}>
+                                                {lastIntegrity.originalityScore}%
+                                            </Typography>
+                                        </Box>
 
-                            <div className="grid grid-cols-2 gap-2 text-xs">
-                                <div className="bg-[var(--vm-bg-primary)] rounded-lg p-2"><span className="text-gray-500">AI Risk</span><p className={`font-medium capitalize ${lastIntegrity.analysis.aiGeneratedRisk === "low" ? "text-emerald-400" : lastIntegrity.analysis.aiGeneratedRisk === "medium" ? "text-amber-400" : "text-red-400"}`}>{lastIntegrity.analysis.aiGeneratedRisk}</p></div>
-                                <div className="bg-[var(--vm-bg-primary)] rounded-lg p-2"><span className="text-gray-500">Style</span><p className="font-medium text-gray-300 capitalize">{lastIntegrity.analysis.styleConsistency?.replace(/_/g, " ")}</p></div>
-                            </div>
+                                        <Grid container spacing={1} sx={{ mb: 2 }}>
+                                            <Grid size={6}>
+                                                <Box sx={{ bgcolor: "background.default", borderRadius: 2, p: 1.5 }}>
+                                                    <Typography variant="caption" color="text.secondary">AI Risk</Typography>
+                                                    <Typography variant="body2" fontWeight={500} sx={{
+                                                        color: lastIntegrity.analysis.aiGeneratedRisk === "low" ? "success.main"
+                                                            : lastIntegrity.analysis.aiGeneratedRisk === "medium" ? "warning.main" : "error.main",
+                                                        textTransform: "capitalize"
+                                                    }}>
+                                                        {lastIntegrity.analysis.aiGeneratedRisk}
+                                                    </Typography>
+                                                </Box>
+                                            </Grid>
+                                            <Grid size={6}>
+                                                <Box sx={{ bgcolor: "background.default", borderRadius: 2, p: 1.5 }}>
+                                                    <Typography variant="caption" color="text.secondary">Style</Typography>
+                                                    <Typography variant="body2" fontWeight={500} color="text.primary" sx={{ textTransform: "capitalize" }}>
+                                                        {lastIntegrity.analysis.styleConsistency?.replace(/_/g, " ")}
+                                                    </Typography>
+                                                </Box>
+                                            </Grid>
+                                        </Grid>
 
-                            {lastIntegrity.suggestions?.length > 0 && (
-                                <div><p className="text-xs text-blue-400 font-medium mb-1">📝 Suggestions</p>
-                                    {lastIntegrity.suggestions.map((s, i) => (<p key={i} className="text-xs text-gray-400 ml-3">• {s}</p>))}
-                                </div>
-                            )}
-                            {lastIntegrity.overallNote && <p className="text-xs text-gray-500 italic">{lastIntegrity.overallNote}</p>}
-                        </motion.div>
-                    )}
+                                        {lastIntegrity.suggestions?.length > 0 && (
+                                            <Box>
+                                                <Typography variant="caption" sx={{ color: "info.main", fontWeight: 600 }}>📝 Suggestions</Typography>
+                                                {lastIntegrity.suggestions.map((s, i) => <Typography key={i} variant="caption" color="text.secondary" sx={{ display: "block", ml: 1.5 }}>• {s}</Typography>)}
+                                            </Box>
+                                        )}
+                                        {lastIntegrity.overallNote && <Typography variant="caption" color="text.secondary" sx={{ fontStyle: "italic", mt: 1, display: "block" }}>{lastIntegrity.overallNote}</Typography>}
+                                    </CardContent>
+                                </Card>
+                            </motion.div>
+                        )}
 
-                    {!lastResult && !isEvaluating && (
-                        <div className="glass-card p-8 text-center"><Sparkles className="w-10 h-10 text-gray-600 mx-auto mb-3" /><p className="text-gray-500 text-sm">Submit your work to get rubric-aware feedback and integrity analysis</p></div>
-                    )}
-                </div>
-            </div>
-        </div>
+                        {!lastResult && !isEvaluating && (
+                            <Card>
+                                <CardContent sx={{ p: 4, textAlign: "center" }}>
+                                    <Sparkles size={40} color="#D0D4E0" style={{ margin: "0 auto 12px" }} />
+                                    <Typography variant="body2" color="text.secondary">Submit your work to get rubric-aware feedback and integrity analysis</Typography>
+                                </CardContent>
+                            </Card>
+                        )}
+                    </Box>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
