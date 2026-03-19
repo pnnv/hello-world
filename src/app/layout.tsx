@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import ThemeRegistry from "@/components/ThemeRegistry";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -33,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <link
           rel="stylesheet"
@@ -45,8 +46,9 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
         style={{ fontFamily: "var(--font-inter), Inter, system-ui, sans-serif" }}
       >
-        <div className="animated-bg" />
-        {children}
+        <ThemeRegistry>
+          {children}
+        </ThemeRegistry>
       </body>
     </html>
   );

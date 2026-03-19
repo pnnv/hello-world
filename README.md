@@ -1,200 +1,138 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" alt="Next.js" />
-  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React" />
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Groq-LLM-orange?style=for-the-badge" alt="Groq" />
-  <img src="https://img.shields.io/badge/Framer_Motion-12-FF0080?style=for-the-badge&logo=framer&logoColor=white" alt="Framer Motion" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
-</p>
+# VidyaMind — Cognitive Learning OS
 
-<h1 align="center">🧠 VidyaMind</h1>
-<h3 align="center">The Cognitive Learning Operating System</h3>
+> AI-powered personalized learning platform with knowledge graph tutoring, Bayesian mastery tracking, rubric-aware grading, and multilingual support — built for every student in India.
 
-<p align="center">
-  <strong>AI-powered personalized tutoring with knowledge graph diagnosis, Bayesian mastery tracking, rubric-aware grading, and spaced repetition scheduling — built for every student in India.</strong>
-</p>
-
-<p align="center">
-  <a href="https://vidyamind.vercel.app/"><img src="https://img.shields.io/badge/🚀_Live_Demo-vidyamind.vercel.app-blueviolet?style=for-the-badge" alt="Live Demo" /></a>
-</p>
+![VidyaMind](https://img.shields.io/badge/VidyaMind-Cognitive%20Learning%20OS-7C8CF5?style=for-the-badge)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)
+![Groq](https://img.shields.io/badge/Groq-Llama%203.3-orange?style=flat-square)
 
 ---
 
-## ✨ What is VidyaMind?
+## 📖 Overview
 
-VidyaMind is a **full-stack cognitive learning platform** that goes beyond traditional study apps. It doesn't just show you content — it *understands what you know*, *diagnoses what you don't*, and *builds a personalized learning path* that adapts in real-time using AI and learning science.
+VidyaMind is an AI-powered educational platform designed to help Indian students prepare for competitive exams (JEE, NEET, UPSC, CLAT, etc.). It combines knowledge graph-based tutoring, Bayesian mastery tracking, rubric-aware grading, and spaced repetition scheduling into a unified learning experience.
 
-Built for Indian competitive exams (NEET, JEE Main, JEE Advanced, CUET, and more), VidyaMind combines:
-- 🤖 **AI Tutoring** — One-on-one concept explanations via LLM
-- 🧠 **Knowledge Graph Diagnosis** — Maps your understanding across interconnected topics
-- 📊 **Bayesian Knowledge Tracing (BKT)** — Probabilistic mastery estimation per concept
-- 📝 **Rubric-Aware Grading** — AI evaluates answers with detailed feedback
-- 📅 **Algorithmic Study Planner** — Full day-by-day plans with spaced repetition
-- 🗺️ **Interactive Roadmaps** — Visual learning paths for each exam
+The platform uses **Groq's inference API** to run open-source LLMs (Llama 3.3 70B) for real-time AI tutoring, evaluation, and quiz generation.
 
 ---
 
-## 🚀 Live Demo
+## ✨ Features
 
-**👉 [vidyamind.vercel.app](https://vidyamind.vercel.app/)**
+### 🧠 Knowledge Graph Tutoring
+- Auto-generates concept maps from official exam syllabi
+- AI diagnoses learning gaps using prerequisite chains
+- Socratic step-by-step coaching with culturally adapted analogies
 
----
+### 📊 Bayesian Mastery Tracking (BKT)
+- Real-time mastery estimation using Bayesian Knowledge Tracing
+- Per-concept mastery scores with visual progress indicators
+- Exam readiness score derived from aggregate mastery
 
-## 🎯 Key Features
+### 📝 Rubric-Aware Grading
+- Submit essays, code, or lab reports for AI evaluation
+- Criterion-by-criterion feedback with actionable suggestions
+- Academic integrity analysis (originality scoring, AI-risk detection)
 
-### 🤖 AI Tutor
-Conversational AI tutor powered by Groq LLMs. Ask questions about any topic, get step-by-step explanations with LaTeX math rendering, code examples, and contextual follow-ups. Supports multiple Indian languages.
+### 📅 Smart Spaced Repetition
+- SM-2+ algorithm with exam-date-aware scheduling
+- Generates day-by-day study plans up to 6 months
+- Tracks completed, missed, and revision sessions
 
-### 🧠 Knowledge Graph
-Automatically generates a visual knowledge graph from your exam syllabus. See how topics connect, identify knowledge gaps, and understand prerequisite chains.
+### 🗺️ Visual Roadmap
+- Zoomable, pannable subject-level roadmap view
+- Color-coded heatmap showing mastery across all topics
+- Subject cards with expandable chapter lists
 
-### 📊 Bayesian Mastery Tracking
-Uses **Bayesian Knowledge Tracing (BKT)** — the same algorithm used by Carnegie Learning and Khan Academy — to probabilistically estimate your mastery of each concept based on your response history.
+### 🌐 Multilingual Support
+- Voice input in Hindi, Tamil, Telugu, Marathi, and English
+- Culturally adapted explanations for Indian students
 
-### 📝 Smart Evaluation
-AI-powered answer evaluation with rubric-aware grading. Get detailed feedback on what you got right, what's missing, and suggestions for improvement. Includes academic integrity checks.
-
-### 📅 Spaced Repetition Study Planner
-Generates **full day-by-day study plans** (up to 180 days) using a deterministic spaced repetition algorithm:
-- Topics scheduled with increasing review intervals (Day 0 → 1 → 3 → 7 → 14 → 30 → 60)
-- Weak areas prioritized first
-- Each day fills your exact hours/day setting with 45-min sessions
-- Collapsible **Month > Week > Day** hierarchy with progress tracking
-- Click-to-mark sessions: ✅ Completed, 📝 Revision, ❌ Missed
-- Status auto-propagates from sessions → days → weeks → months
-
-### 🗺️ Interactive Roadmap
-Visual learning roadmap organized by subjects and topics. Track progress through the entire exam syllabus with mastery-based color coding.
-
-### 📚 Concept Learning
-Study any topic with AI-generated explanations. Organized by subject and roadmap sequence. Search functionality to find any topic instantly.
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    VidyaMind Frontend                     │
-│               Next.js 16 + React 19 + TypeScript         │
-├──────────┬──────────┬──────────┬──────────┬──────────────┤
-│  AI      │ Knowledge│  Study   │  Mastery │  Evaluation  │
-│  Tutor   │  Graph   │  Planner │  Engine  │  Engine      │
-├──────────┴──────────┴──────────┴──────────┴──────────────┤
-│                    Zustand State Management               │
-│              (Persistent + Knowledge Graph)               │
-├─────────────────────────────────────────────────────────┤
-│                    Groq LLM API (Free Tier)              │
-│                 llama-3.3-70b-versatile                   │
-└─────────────────────────────────────────────────────────┘
-```
+### 🔒 Academic Integrity
+- Originality scoring and citation suggestions
+- Writing style consistency analysis
+- AI-generated content risk assessment
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-| Layer | Technology |
+### Frontend
+| Technology | Purpose |
 |---|---|
-| **Framework** | Next.js 16 (App Router, Turbopack) |
-| **UI Library** | React 19 |
-| **Language** | TypeScript 5 |
-| **Styling** | Vanilla CSS + CSS Variables (Dark theme) |
-| **State Management** | Zustand (with localStorage persistence) |
-| **LLM Provider** | Groq (llama-3.3-70b-versatile) |
-| **Animations** | Framer Motion 12 |
-| **Math Rendering** | KaTeX |
-| **Markdown** | react-markdown + react-syntax-highlighter |
-| **UI Components** | Radix UI primitives |
-| **Icons** | Lucide React |
-| **Graph Visualization** | react-force-graph-2d |
-| **Deployment** | Vercel |
+| **Next.js 16** | React framework with App Router |
+| **TypeScript** | Type-safe development |
+| **Material UI (MUI)** | Component library with soft pastel theme |
+| **Framer Motion** | Animations and transitions |
+| **Zustand** | Lightweight state management with persistence |
+| **Recharts** | Data visualization (charts) |
+| **React Force Graph 2D** | Knowledge graph visualization |
+| **KaTeX** | Math equation rendering |
+| **React Markdown** | Markdown rendering with math support |
+
+### Backend (Python)
+| Technology | Purpose |
+|---|---|
+| **FastAPI** | REST API server |
+| **Groq SDK** | LLM inference (Llama 3.3 70B) |
+| **Python 3.11+** | Backend runtime |
+
+### AI / ML
+| Component | Algorithm |
+|---|---|
+| **Mastery Tracking** | Bayesian Knowledge Tracing (BKT) |
+| **Spaced Repetition** | SM-2+ algorithm |
+| **LLM Inference** | Groq API → Llama 3.3 70B Versatile |
 
 ---
 
-## 📦 Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
+- **Node.js** 18+ and npm/bun
+- **Python** 3.11+ (for backend)
+- **Groq API Key** from [console.groq.com](https://console.groq.com)
 
-- Node.js 18+ installed
-- A free [Groq API key](https://console.groq.com/)
-
-### Installation
-
+### 1. Clone the Repository
 ```bash
-# Clone the repository
-git clone https://github.com/mayankjndl/vidyamind.git
+git clone https://github.com/your-username/vidyamind.git
 cd vidyamind
+```
 
-# Install dependencies
+### 2. Install Frontend Dependencies
+```bash
 npm install
+# or
+bun install
+```
 
-# Create environment file
-echo "GROQ_API_KEY=your_groq_api_key_here" > .env.local
+### 3. Install Backend Dependencies
+```bash
+cd backend
+pip install -r requirements.txt
+cd ..
+```
 
-# Start development server
+### 4. Set Environment Variables
+Create a `.env.local` file in the project root:
+```env
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+### 5. Run the Development Servers
+
+**Frontend** (in one terminal):
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Build for Production
-
+**Backend** (in another terminal):
 ```bash
-npm run build
-npm start
+cd backend
+uvicorn main:app --reload --port 8000
 ```
 
----
-
-## 📖 How It Works
-
-### 1. Register & Select Your Exam
-Choose from NEET, JEE Main, JEE Advanced, CUET, or other Indian competitive exams.
-
-### 2. Explore Your Roadmap
-VidyaMind generates a complete topic roadmap for your exam, organized by subjects.
-
-### 3. Learn with AI
-Click any topic to get AI-generated explanations. Ask follow-up questions, switch languages, and dive deeper.
-
-### 4. Get Evaluated
-Write answers and get rubric-aware AI evaluation with detailed feedback and scoring.
-
-### 5. Track Mastery
-Your mastery of each concept is tracked using Bayesian Knowledge Tracing. Watch your understanding grow.
-
-### 6. Plan Your Study
-Set your exam date and hours/day. Get a full day-by-day study plan with spaced repetition scheduling. Track daily progress with visual status markers.
-
----
-
-## 🧪 Algorithms
-
-### Bayesian Knowledge Tracing (BKT)
-```
-P(Lₙ) = P(Lₙ₋₁|obs) + (1 - P(Lₙ₋₁|obs)) × P(T)
-```
-Where P(L) is mastery probability, P(T) is transition probability, updated after each student response.
-
-### Spaced Repetition
-Review intervals follow expanding gaps: **0 → 1 → 3 → 7 → 14 → 30 → 60 days**, adjusted based on mastery level and exam proximity.
-
-### Readiness Calculation
-```
-readiness = startReadiness + roomToGrow × (1 - e^(-k × coverage))
-```
-Deterministic formula using total study hours, topic count, and current mastery. No LLM guessing.
-
----
-
-## 🌐 Supported Exams
-
-| Exam | Subjects |
-|---|---|
-| 🩺 NEET UG 2026 | Physics, Chemistry, Biology |
-| ⚙️ JEE Main 2026 | Physics, Chemistry, Mathematics |
-| 🔬 JEE Advanced 2026 | Physics, Chemistry, Mathematics |
-| 🎓 CUET 2026 | English, General Test, Domain Subjects |
+The frontend runs on `http://localhost:3000` and proxies API requests to the Python backend on port 8000 (configured in `next.config.ts`).
 
 ---
 
@@ -203,61 +141,121 @@ Deterministic formula using total study hours, topic count, and current mastery.
 ```
 vidyamind/
 ├── src/
-│   ├── app/                    # Next.js App Router pages
-│   │   ├── api/ai/             # API routes (tutor, evaluate, study-plan, KG)
-│   │   ├── auth/               # Login & registration
-│   │   ├── dashboard/          # Main dashboard pages
-│   │   │   ├── evaluate/       # Answer evaluation
-│   │   │   ├── learn/          # Concept learning
-│   │   │   ├── planner/        # Study planner
-│   │   │   └── roadmap/        # Visual roadmap
-│   │   └── page.tsx            # Landing page
-│   ├── components/             # Reusable UI components
+│   ├── app/                        # Next.js App Router pages
+│   │   ├── page.tsx                # Landing page
+│   │   ├── layout.tsx              # Root layout with MUI ThemeProvider
+│   │   ├── globals.css             # Global styles and design tokens
+│   │   ├── auth/
+│   │   │   └── page.tsx            # Login & registration with exam selection
+│   │   ├── dashboard/
+│   │   │   ├── layout.tsx          # Dashboard layout with sidebar
+│   │   │   ├── page.tsx            # Main dashboard with stats & KG overview
+│   │   │   ├── knowledge-graph/
+│   │   │   │   └── page.tsx        # Syllabus tracker with subject tabs
+│   │   │   ├── roadmap/
+│   │   │   │   └── page.tsx        # Zoomable exam roadmap visualization
+│   │   │   ├── learn/
+│   │   │   │   └── page.tsx        # AI tutor chat + concept sidebar + quiz
+│   │   │   ├── evaluate/
+│   │   │   │   └── page.tsx        # Rubric-aware grading + integrity check
+│   │   │   └── planner/
+│   │   │       └── page.tsx        # Spaced repetition study planner
+│   │   └── api/ai/                 # Next.js API routes (proxy to backend)
+│   ├── components/
+│   │   └── dashboard/
+│   │       └── Sidebar.tsx         # Navigation sidebar
 │   ├── lib/
-│   │   ├── ai/                 # Groq client & prompts
-│   │   ├── data/               # Exam syllabi data
-│   │   ├── knowledge-graph/    # KG types & builder
-│   │   ├── mastery/            # BKT & spaced repetition
-│   │   └── planner/            # Algorithmic plan generator
-│   └── store/                  # Zustand stores
-├── backend/                    # Python FastAPI backend (optional)
-└── public/                     # Static assets
+│   │   ├── ai/
+│   │   │   ├── groq.ts             # Groq SDK client wrapper
+│   │   │   └── prompts.ts          # System prompt templates
+│   │   ├── data/
+│   │   │   └── exam-syllabi.ts     # Hardcoded exam data (JEE, NEET, etc.)
+│   │   ├── knowledge-graph/
+│   │   │   ├── types.ts            # TypeScript interfaces
+│   │   │   ├── builder.ts          # KG construction logic
+│   │   │   └── traversal.ts        # Graph traversal algorithms
+│   │   ├── mastery/
+│   │   │   ├── bkt.ts              # Bayesian Knowledge Tracing
+│   │   │   └── spaced-repetition.ts # SM-2+ scheduling
+│   │   └── planner/
+│   │       └── plan-generator.ts   # Study plan generation algorithm
+│   └── store/
+│       ├── stores.ts               # Zustand stores (KG, Mastery, Chat, Eval, Plan)
+│       └── auth-store.ts           # Authentication store
+├── backend/                        # Python FastAPI backend
+│   ├── main.py                     # FastAPI app entry point
+│   ├── routers/                    # API route handlers
+│   ├── services/
+│   │   └── groq_client.py          # Groq API client (Python)
+│   ├── algorithms/                 # BKT, KG builder, spaced repetition
+│   ├── prompts/
+│   │   └── templates.py            # LLM prompt templates
+│   └── requirements.txt
+├── next.config.ts                  # Next.js config with API proxy
+├── package.json
+└── tsconfig.json
 ```
 
 ---
 
-## 🤝 Contributing
+## 🔑 API & Model Usage
 
-Contributions are welcome! Whether it's:
-- 🐛 Bug fixes
-- ✨ New features
-- 📚 Adding new exam syllabi
-- 🌐 Adding language support
-- 📖 Documentation improvements
+### Groq (Not Grok)
 
-Feel free to open an issue or submit a pull request.
+This project uses **Groq** (groq.com) — an LLM inference platform — not **Grok** (xAI's chatbot). They are completely different products.
+
+| | Groq (used here) | Grok (xAI) |
+|---|---|---|
+| Company | Groq Inc. | xAI (Elon Musk) |
+| What it is | LLM inference API | A chatbot model |
+| Models | Runs Llama, Mixtral, etc. | Proprietary model |
+| API | groq.com | api.x.ai |
+
+### Can I continue using Groq?
+
+**Yes, absolutely.** Groq provides an inference API for open-source models. You're running **Meta's Llama 3.3 70B** which is released under the Llama Community License — free for commercial use.
+
+**Setup:**
+1. Sign up at [console.groq.com](https://console.groq.com)
+2. Generate an API key
+3. Set `GROQ_API_KEY` in your environment
+4. Free tier includes rate limits; paid plans available for production
 
 ---
 
-## 📝 License
+## 🎨 Design System
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+VidyaMind uses a **soft pastel Material UI theme** with:
+- **Primary:** Soft Lavender (`#7C8CF5`)
+- **Secondary:** Soft Pink (`#F5A8C8`)
+- **Background:** Near-white with blue tint (`#FAFBFE`)
+- **Flat design** — no gradients, minimal shadows
+- **Clean typography** with Inter font family
 
 ---
 
-## 👨‍💻 Author
+## 🔮 Future Improvements
 
-**Mayank Jindal**
-- GitHub: [@mayankjndl](https://github.com/mayankjndl)
+- [ ] Real authentication with OAuth (Google, GitHub)
+- [ ] PostgreSQL database for persistent user data
+- [ ] Collaborative study groups
+- [ ] Progress analytics dashboard with detailed charts
+- [ ] PDF syllabus parsing with OCR support
+- [ ] Mobile-responsive PWA
+- [ ] Offline mode with service workers
+- [ ] Integration with Google Calendar for study reminders
+- [ ] Voice output (text-to-speech) for explanations
+- [ ] Gamification (badges, leaderboards, XP system)
+
+---
+
+## 📄 License
+
+This project is for educational purposes. The AI models (Llama 3.3) are used under Meta's Llama Community License.
 
 ---
 
 <p align="center">
-  <strong>⭐ If VidyaMind helps you learn, give it a star! ⭐</strong>
+  <strong>VidyaMind</strong> — The Cognitive Learning Operating System<br/>
+  <em>Built with ❤️ for every student in India</em>
 </p>
-
----
-
-### Keywords
-
-`ai-education` `edtech` `study-planner` `knowledge-graph` `bayesian-knowledge-tracing` `spaced-repetition` `ai-tutor` `neet-preparation` `jee-preparation` `competitive-exams` `india` `personalized-learning` `next.js` `react` `typescript` `groq` `llm` `cognitive-learning` `mastery-tracking` `exam-readiness`

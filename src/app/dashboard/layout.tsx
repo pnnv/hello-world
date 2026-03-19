@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { useAuthStore } from "@/store/auth-store";
 
@@ -14,7 +16,7 @@ export default function DashboardLayout({
     const [mounted, setMounted] = useState(false);
     const { currentUser } = useAuthStore();
     const router = useRouter();
-    const marginLeft = collapsed ? 68 : 240;
+    const drawerWidth = collapsed ? 68 : 240;
 
     useEffect(() => { setMounted(true); }, []);
 
@@ -26,21 +28,27 @@ export default function DashboardLayout({
 
     if (!mounted || !currentUser) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: "var(--vm-border)", borderTopColor: "var(--vm-accent)" }} />
-            </div>
+            <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "background.default" }}>
+                <CircularProgress size={28} sx={{ color: "primary.main" }} />
+            </Box>
         );
     }
 
     return (
-        <div className="min-h-screen">
+        <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" }}>
             <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
-            <main
-                className="min-h-screen p-6 lg:p-8 transition-all duration-[250ms] ease-in-out"
-                style={{ marginLeft }}
+            <Box
+                component="main"
+                sx={{
+                    flexGrow: 1,
+                    ml: `${drawerWidth}px`,
+                    p: { xs: 3, lg: 4 },
+                    transition: "margin-left 250ms ease-in-out",
+                    minHeight: "100vh",
+                }}
             >
                 {children}
-            </main>
-        </div>
+            </Box>
+        </Box>
     );
 }

@@ -3,6 +3,13 @@
 import { motion } from "framer-motion";
 import { Brain, BookOpen, FileCheck, Calendar, Upload, Target, Flame, ChevronRight, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import LinearProgress from "@mui/material/LinearProgress";
+import Grid from "@mui/material/Grid";
 import { useKGStore, useMasteryStore } from "@/store/stores";
 import { useAuthStore } from "@/store/auth-store";
 import { getExamById, buildKGFromExam } from "@/lib/data/exam-syllabi";
@@ -23,13 +30,10 @@ export default function DashboardPage() {
 
     useEffect(() => { setMounted(true); }, []);
 
-    // Auto-load exam syllabus — uses hardcoded concepts directly (no AI API)
     useEffect(() => {
         if (!mounted || !exam || autoLoadedRef.current) return;
-
         const examMismatch = knowledgeGraph && forExamId && forExamId !== exam.id;
         const noKG = !knowledgeGraph;
-
         if (noKG || examMismatch) {
             autoLoadedRef.current = true;
             if (examMismatch) {
@@ -37,7 +41,6 @@ export default function DashboardPage() {
                 useMasteryStore.getState().resetMastery();
             }
             if (exam.examDate) setExamDate(exam.examDate);
-            // Build KG directly from hardcoded official syllabus
             const kg = buildKGFromExam(exam);
             setKnowledgeGraph(kg, exam.id);
             initializeConcepts(kg.concepts.map((c) => c.id));
@@ -50,7 +53,6 @@ export default function DashboardPage() {
     const masteredCount = Object.values(mastery).filter((m) => m.mastery >= 0.85).length;
     const learningCount = Object.values(mastery).filter((m) => m.mastery >= 0.4 && m.mastery < 0.85).length;
 
-    // For custom syllabus uploads (still uses AI)
     const handleGenerateKG = useCallback(async (text: string, subject?: string) => {
         if (!text.trim()) return;
         setGenerating(true);
@@ -71,212 +73,207 @@ export default function DashboardPage() {
 
     if (!mounted) {
         return (
-            <div className="max-w-6xl mx-auto space-y-8 animate-pulse">
-                <div><div className="h-7 w-36 rounded-lg" style={{ background: "var(--vm-bg-card)" }} /><div className="h-4 w-56 rounded-lg mt-2" style={{ background: "var(--vm-bg-card)" }} /></div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {[0, 1, 2, 3].map(i => <div key={i} className="h-24 rounded-2xl" style={{ background: "var(--vm-bg-card)" }} />)}
-                </div>
-            </div>
+            <Box sx={{ maxWidth: 1200, mx: "auto" }}>
+                <Box sx={{ height: 28, width: 144, borderRadius: 2, bgcolor: "action.hover", mb: 2 }} />
+                <Grid container spacing={2}>
+                    {[0, 1, 2, 3].map(i => <Grid size={{ xs: 12, sm: 6, lg: 3 }} key={i}><Box sx={{ height: 96, borderRadius: 4, bgcolor: "action.hover" }} /></Grid>)}
+                </Grid>
+            </Box>
         );
     }
 
+    const getMasteryColor = (m: number) => m >= 0.85 ? "primary.main" : m >= 0.65 ? "success.main" : m >= 0.4 ? "warning.main" : m >= 0.15 ? "error.main" : "text.disabled";
+
     return (
-        <div className="max-w-6xl mx-auto space-y-8">
+        <Box sx={{ maxWidth: 1200, mx: "auto" }}>
             {/* Header */}
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold" style={{ color: "var(--vm-text-primary)" }}>Dashboard</h1>
-                        <p className="text-sm mt-1" style={{ color: "var(--vm-text-muted)" }}>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 4 }}>
+                    <Box>
+                        <Typography variant="h5" fontWeight={700} color="text.primary">Dashboard</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                             {exam ? `${exam.icon} Preparing for ${exam.name}` : "Welcome back. Let's continue learning."}
-                        </p>
-                    </div>
+                        </Typography>
+                    </Box>
                     {exam?.examDate && (
-                        <div className="text-right">
-                            <p className="text-[11px]" style={{ color: "var(--vm-text-faint)" }}>Exam Date</p>
-                            <p className="text-sm font-semibold" style={{ color: "var(--vm-text-secondary)" }}>
+                        <Box sx={{ textAlign: "right" }}>
+                            <Typography variant="caption" color="text.secondary">Exam Date</Typography>
+                            <Typography variant="body2" fontWeight={600} color="text.primary">
                                 {new Date(exam.examDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
-                            </p>
-                        </div>
+                            </Typography>
+                        </Box>
                     )}
-                </div>
+                </Box>
             </motion.div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Grid container spacing={2} sx={{ mb: 4 }}>
                 {[
                     { label: "Exam Readiness", value: `${readiness}%`, icon: Target, detail: readiness > 70 ? "On track" : "Keep studying" },
                     { label: "Concepts Mastered", value: `${masteredCount}/${totalConcepts}`, icon: Brain, detail: `${learningCount} in progress` },
                     { label: "Study Streak", value: "7 days", icon: Flame, detail: "Personal best" },
                     { label: "XP Earned", value: `${Object.values(mastery).reduce((s, m) => s + m.totalAttempts * 10, 0)}`, icon: Sparkles, detail: "Scholar Level" },
                 ].map((stat, i) => (
-                    <motion.div
-                        key={stat.label}
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.08, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                        whileHover={{ y: -3 }}
-                        className="stat-card"
-                    >
-                        <div className="flex items-start justify-between">
-                            <div>
-                                <p className="text-xs font-medium tracking-wide" style={{ color: "var(--vm-text-muted)" }}>{stat.label}</p>
-                                <p className="text-xl font-bold mt-1.5" style={{ color: "var(--vm-text-primary)" }}>{stat.value}</p>
-                                <p className="text-[11px] mt-1" style={{ color: "var(--vm-text-faint)" }}>{stat.detail}</p>
-                            </div>
-                            <div className="w-9 h-9 rounded-lg flex items-center justify-center icon-box" style={{ background: "var(--vm-accent-muted)", boxShadow: "0 0 12px rgba(124,140,245,0.06)" }}>
-                                <stat.icon className="w-4 h-4" style={{ color: "var(--vm-accent)" }} />
-                            </div>
-                        </div>
-                    </motion.div>
+                    <Grid size={{ xs: 12, sm: 6, lg: 3 }} key={stat.label}>
+                        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}>
+                            <Card sx={{ transition: "all 0.2s ease", "&:hover": { boxShadow: 3 } }}>
+                                <CardContent sx={{ p: 2.5 }}>
+                                    <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+                                        <Box>
+                                            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500, letterSpacing: "0.03em" }}>{stat.label}</Typography>
+                                            <Typography variant="h5" fontWeight={700} color="text.primary" sx={{ mt: 0.5 }}>{stat.value}</Typography>
+                                            <Typography variant="caption" color="text.secondary">{stat.detail}</Typography>
+                                        </Box>
+                                        <Box sx={{ width: 36, height: 36, borderRadius: 2, display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "rgba(124, 140, 245, 0.08)" }}>
+                                            <stat.icon size={16} color="#7C8CF5" />
+                                        </Box>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+                    </Grid>
                 ))}
-            </div>
+            </Grid>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Upload / KG Section */}
-                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4 }} className="lg:col-span-2 glass-card p-6">
-                    {knowledgeGraph ? (
-                        <div>
-                            <div className="flex items-center justify-between mb-5">
-                                <div>
-                                    <h2 className="text-base font-semibold" style={{ color: "var(--vm-text-primary)" }}>{knowledgeGraph.subject}</h2>
-                                    <p className="text-xs mt-0.5" style={{ color: "var(--vm-text-muted)" }}>{knowledgeGraph.concepts.length} concepts mapped</p>
-                                </div>
-                                <Link href="/dashboard/knowledge-graph">
-                                    <motion.button whileHover={{ x: 2 }} className="px-4 py-2 rounded-lg text-xs font-medium flex items-center gap-1.5" style={{ background: "var(--vm-accent-muted)", color: "var(--vm-accent)" }}>
-                                        View Graph <ChevronRight className="w-3.5 h-3.5" />
-                                    </motion.button>
-                                </Link>
-                            </div>
-                            <div className="space-y-1 max-h-64 overflow-y-auto">
-                                {knowledgeGraph.concepts.slice(0, 8).map((concept) => {
-                                    const m = mastery[concept.id]?.mastery || 0;
-                                    return (
-                                        <Link key={concept.id} href={`/dashboard/learn?concept=${concept.id}`}>
-                                            <div className="concept-row">
-                                                <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: m >= 0.85 ? "var(--vm-mastery-4)" : m >= 0.65 ? "var(--vm-mastery-3)" : m >= 0.4 ? "var(--vm-mastery-2)" : m >= 0.15 ? "var(--vm-mastery-1)" : "var(--vm-mastery-0)", boxShadow: m >= 0.4 ? `0 0 6px ${m >= 0.85 ? "var(--vm-mastery-4)" : m >= 0.65 ? "var(--vm-mastery-3)" : "var(--vm-mastery-2)"}44` : "none" }} />
-                                                <span className="text-sm flex-1" style={{ color: "var(--vm-text-secondary)" }}>{concept.name}</span>
-                                                <span className="text-[11px]" style={{ color: "var(--vm-text-faint)" }}>{Math.round(m * 100)}%</span>
-                                            </div>
+            <Grid container spacing={3}>
+                {/* KG / Upload Section */}
+                <Grid size={{ xs: 12, lg: 8 }}>
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                        <Card sx={{ p: 3 }}>
+                            {knowledgeGraph ? (
+                                <Box>
+                                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
+                                        <Box>
+                                            <Typography variant="subtitle1" fontWeight={600} color="text.primary">{knowledgeGraph.subject}</Typography>
+                                            <Typography variant="caption" color="text.secondary">{knowledgeGraph.concepts.length} concepts mapped</Typography>
+                                        </Box>
+                                        <Link href="/dashboard/knowledge-graph">
+                                            <Button size="small" endIcon={<ChevronRight size={14} />} sx={{ color: "primary.main", bgcolor: "rgba(124,140,245,0.08)", "&:hover": { bgcolor: "rgba(124,140,245,0.12)" } }}>
+                                                View Graph
+                                            </Button>
                                         </Link>
-                                    );
-                                })}
-                            </div>
-                            <button onClick={() => { useKGStore.getState().reset(); useMasteryStore.getState().resetMastery(); }} className="mt-4 text-[11px] transition-colors duration-200" style={{ color: "var(--vm-text-faint)" }}>
-                                Upload new syllabus
-                            </button>
-                        </div>
-                    ) : (
-                        <div>
-                            <h2 className="text-base font-semibold mb-1" style={{ color: "var(--vm-text-primary)" }}>Get Started</h2>
-                            <p className="text-xs mb-5" style={{ color: "var(--vm-text-muted)" }}>Upload your syllabus or paste content to generate a knowledge graph.</p>
+                                    </Box>
+                                    <Box sx={{ maxHeight: 256, overflow: "auto" }}>
+                                        {knowledgeGraph.concepts.slice(0, 8).map((concept) => {
+                                            const m = mastery[concept.id]?.mastery || 0;
+                                            return (
+                                                <Link key={concept.id} href={`/dashboard/learn?concept=${concept.id}`} style={{ textDecoration: "none" }}>
+                                                    <Box sx={{
+                                                        display: "flex", alignItems: "center", gap: 1.5, px: 1.5, py: 1, borderRadius: 2,
+                                                        "&:hover": { bgcolor: "action.hover" }, cursor: "pointer", transition: "all 0.2s ease",
+                                                    }}>
+                                                        <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: getMasteryColor(m), flexShrink: 0 }} />
+                                                        <Typography variant="body2" color="text.primary" sx={{ flex: 1 }}>{concept.name}</Typography>
+                                                        <Typography variant="caption" color="text.secondary">{Math.round(m * 100)}%</Typography>
+                                                    </Box>
+                                                </Link>
+                                            );
+                                        })}
+                                    </Box>
+                                    <Button size="small" onClick={() => { useKGStore.getState().reset(); useMasteryStore.getState().resetMastery(); }} sx={{ mt: 2, color: "text.secondary", fontSize: "0.6875rem" }}>
+                                        Upload new syllabus
+                                    </Button>
+                                </Box>
+                            ) : (
+                                <Box>
+                                    <Typography variant="subtitle1" fontWeight={600} color="text.primary" sx={{ mb: 0.5 }}>Get Started</Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>Upload your syllabus or paste content to generate a knowledge graph.</Typography>
 
-                            <div
-                                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                                onDragLeave={() => setDragOver(false)}
-                                onDrop={(e) => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f) handleFileUpload(f); }}
-                                className="rounded-xl p-8 text-center cursor-pointer transition-all duration-300"
-                                style={{
-                                    border: `2px dashed ${dragOver ? "var(--vm-accent)" : "var(--vm-border)"}`,
-                                    background: dragOver ? "var(--vm-accent-glow)" : "transparent",
-                                }}
-                            >
-                                <Upload className="w-8 h-8 mx-auto mb-3" style={{ color: "var(--vm-text-faint)" }} />
-                                <p className="text-sm" style={{ color: "var(--vm-text-muted)" }}>
-                                    Drop a file or{" "}
-                                    <label className="cursor-pointer font-medium" style={{ color: "var(--vm-accent)" }}>
-                                        browse
-                                        <input type="file" className="hidden" accept=".txt,.md,.pdf" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileUpload(f); }} />
-                                    </label>
-                                </p>
-                                <p className="text-[11px] mt-1" style={{ color: "var(--vm-text-faint)" }}>Supports .txt, .md files</p>
-                            </div>
+                                    <Box
+                                        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                                        onDragLeave={() => setDragOver(false)}
+                                        onDrop={(e) => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f) handleFileUpload(f); }}
+                                        sx={{
+                                            borderRadius: 3, p: 4, textAlign: "center", cursor: "pointer",
+                                            border: `2px dashed ${dragOver ? "#7C8CF5" : "#E8EAF0"}`,
+                                            bgcolor: dragOver ? "rgba(124,140,245,0.04)" : "transparent",
+                                            transition: "all 0.3s ease",
+                                        }}
+                                    >
+                                        <Upload size={32} color="#B8BCD0" style={{ margin: "0 auto 12px" }} />
+                                        <Typography variant="body2" color="text.secondary">
+                                            Drop a file or{" "}
+                                            <label style={{ cursor: "pointer", fontWeight: 500, color: "#7C8CF5" }}>
+                                                browse
+                                                <input type="file" style={{ display: "none" }} accept=".txt,.md,.pdf" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileUpload(f); }} />
+                                            </label>
+                                        </Typography>
+                                        <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>Supports .txt, .md files</Typography>
+                                    </Box>
 
-                            <div className="mt-4">
-                                <p className="text-[11px] mb-2" style={{ color: "var(--vm-text-faint)" }}>Or paste your syllabus:</p>
-                                <textarea
-                                    value={textInput}
-                                    onChange={(e) => setTextInput(e.target.value)}
-                                    placeholder="Paste your syllabus, course outline, or textbook chapter here..."
-                                    className="w-full h-28 rounded-xl p-4 text-sm resize-none focus:outline-none transition-all duration-300"
-                                    style={{
-                                        background: "var(--vm-bg-primary)",
-                                        border: "1px solid var(--vm-border)",
-                                        color: "var(--vm-text-secondary)",
-                                    }}
-                                />
-                                <motion.button
-                                    whileHover={{ y: -1 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => handleGenerateKG(textInput)}
-                                    disabled={!textInput.trim() || isGenerating}
-                                    className="mt-3 w-full py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                                    style={{
-                                        background: "linear-gradient(135deg, #5c6bc0, #7c4dff)",
-                                        color: "rgba(255,255,255,0.9)",
-                                        boxShadow: "0 2px 8px rgba(92, 107, 192, 0.2)",
-                                    }}
-                                >
-                                    {isGenerating ? (
-                                        <><div className="w-4 h-4 border-2 border-white/20 border-t-white/80 rounded-full animate-spin" />Generating...</>
-                                    ) : (
-                                        <><Brain className="w-4 h-4" />Generate Knowledge Graph</>
-                                    )}
-                                </motion.button>
-                            </div>
-                        </div>
-                    )}
-                </motion.div>
+                                    <Box sx={{ mt: 2 }}>
+                                        <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block" }}>Or paste your syllabus:</Typography>
+                                        <textarea
+                                            value={textInput}
+                                            onChange={(e) => setTextInput(e.target.value)}
+                                            placeholder="Paste your syllabus, course outline, or textbook chapter here..."
+                                            style={{
+                                                width: "100%", height: 112, borderRadius: 12, padding: 16, fontSize: 14, resize: "none",
+                                                background: "#F5F6FA", border: "1px solid #E8EAF0", color: "#2D3142",
+                                                fontFamily: "inherit", outline: "none",
+                                            }}
+                                        />
+                                        <Button
+                                            variant="contained" fullWidth onClick={() => handleGenerateKG(textInput)}
+                                            disabled={!textInput.trim() || isGenerating} startIcon={<Brain size={16} />}
+                                            sx={{ mt: 1.5, py: 1.5 }}
+                                        >
+                                            {isGenerating ? "Generating..." : "Generate Knowledge Graph"}
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            )}
+                        </Card>
+                    </motion.div>
+                </Grid>
 
                 {/* Quick Actions */}
-                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.4 }} className="space-y-4">
-                    <h2 className="text-sm font-semibold tracking-wide" style={{ color: "var(--vm-text-secondary)" }}>Quick Actions</h2>
-                    {[
-                        { href: "/dashboard/knowledge-graph", icon: Brain, label: "Knowledge Graph", desc: "Explore concept map" },
-                        { href: "/dashboard/learn", icon: BookOpen, label: "AI Tutor", desc: "Socratic learning" },
-                        { href: "/dashboard/evaluate", icon: FileCheck, label: "Submit Work", desc: "Get rubric feedback" },
-                        { href: "/dashboard/planner", icon: Calendar, label: "Study Planner", desc: "Spaced repetition" },
-                    ].map((action, i) => (
-                        <Link key={action.href} href={action.href}>
-                            <motion.div
-                                initial={{ opacity: 0, x: 12 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.5 + i * 0.08 }}
-                                whileHover={{ y: -2, x: 3 }}
-                                className="action-card group"
-                            >
-                                <div className="w-9 h-9 rounded-lg flex items-center justify-center icon-box" style={{ background: "var(--vm-accent-muted)", boxShadow: "0 0 10px rgba(124,140,245,0.05)" }}>
-                                    <action.icon className="w-4 h-4" style={{ color: "var(--vm-accent)" }} />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium" style={{ color: "var(--vm-text-primary)" }}>{action.label}</p>
-                                    <p className="text-[11px]" style={{ color: "var(--vm-text-faint)" }}>{action.desc}</p>
-                                </div>
-                                <ChevronRight className="w-4 h-4 transition-all duration-300 group-hover:translate-x-1" style={{ color: "var(--vm-text-faint)" }} />
-                            </motion.div>
-                        </Link>
-                    ))}
+                <Grid size={{ xs: 12, lg: 4 }}>
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2, letterSpacing: "0.03em" }}>Quick Actions</Typography>
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                            {[
+                                { href: "/dashboard/knowledge-graph", icon: Brain, label: "Knowledge Graph", desc: "Explore concept map" },
+                                { href: "/dashboard/learn", icon: BookOpen, label: "AI Tutor", desc: "Socratic learning" },
+                                { href: "/dashboard/evaluate", icon: FileCheck, label: "Submit Work", desc: "Get rubric feedback" },
+                                { href: "/dashboard/planner", icon: Calendar, label: "Study Planner", desc: "Spaced repetition" },
+                            ].map((action) => (
+                                <Link key={action.href} href={action.href} style={{ textDecoration: "none" }}>
+                                    <Card sx={{ transition: "all 0.2s ease", "&:hover": { borderColor: "primary.light", boxShadow: 2 } }}>
+                                        <CardContent sx={{ p: 2, "&:last-child": { pb: 2 }, display: "flex", alignItems: "center", gap: 2 }}>
+                                            <Box sx={{ width: 36, height: 36, borderRadius: 2, display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "rgba(124,140,245,0.08)" }}>
+                                                <action.icon size={16} color="#7C8CF5" />
+                                            </Box>
+                                            <Box sx={{ flex: 1 }}>
+                                                <Typography variant="body2" fontWeight={500} color="text.primary">{action.label}</Typography>
+                                                <Typography variant="caption" color="text.secondary">{action.desc}</Typography>
+                                            </Box>
+                                            <ChevronRight size={16} color="#B8BCD0" />
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+                            ))}
+                        </Box>
 
-                    {/* Readiness */}
-                    <div className="glass-card p-5">
-                        <p className="text-xs font-medium mb-3" style={{ color: "var(--vm-text-muted)" }}>Exam Readiness</p>
-                        <div className="relative w-full h-2 rounded-full overflow-hidden" style={{ background: "var(--vm-bg-primary)" }}>
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${readiness}%` }}
-                                transition={{ duration: 1, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
-                                className="h-full rounded-full"
-                                style={{ background: "linear-gradient(90deg, var(--vm-accent), #a78bfa)" }}
-                            />
-                        </div>
-                        <div className="flex justify-between mt-2">
-                            <span className="text-[10px]" style={{ color: "var(--vm-text-faint)" }}>0%</span>
-                            <span className="text-sm font-bold" style={{ color: "var(--vm-text-primary)" }}>{readiness}%</span>
-                            <span className="text-[10px]" style={{ color: "var(--vm-text-faint)" }}>100%</span>
-                        </div>
-                    </div>
-                </motion.div>
-            </div>
-        </div>
+                        {/* Readiness Bar */}
+                        <Card sx={{ mt: 2 }}>
+                            <CardContent sx={{ p: 2.5 }}>
+                                <Typography variant="caption" color="text.secondary" sx={{ mb: 1.5, display: "block", fontWeight: 500 }}>Exam Readiness</Typography>
+                                <LinearProgress
+                                    variant="determinate"
+                                    value={readiness}
+                                    sx={{ height: 8, borderRadius: 4, bgcolor: "#F0F1F5", "& .MuiLinearProgress-bar": { bgcolor: "primary.main", borderRadius: 4 } }}
+                                />
+                                <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+                                    <Typography variant="caption" color="text.secondary">0%</Typography>
+                                    <Typography variant="subtitle2" fontWeight={700} color="text.primary">{readiness}%</Typography>
+                                    <Typography variant="caption" color="text.secondary">100%</Typography>
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
