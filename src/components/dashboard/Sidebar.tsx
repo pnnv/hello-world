@@ -3,6 +3,17 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Divider from "@mui/material/Divider";
+import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
 import {
     LayoutDashboard,
     Brain,
@@ -14,7 +25,6 @@ import {
     LogOut,
     Map,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth-store";
 import { getExamById } from "@/lib/data/exam-syllabi";
 
@@ -45,22 +55,31 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
     };
 
     return (
-        <motion.aside
-            animate={{ width: sidebarWidth }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-[var(--vm-bg-secondary)] overflow-hidden"
-            style={{
-                borderRight: "1px solid var(--vm-border)",
-                boxShadow: "4px 0 24px rgba(0, 0, 0, 0.3)",
+        <Drawer
+            variant="permanent"
+            sx={{
+                width: sidebarWidth,
+                flexShrink: 0,
+                "& .MuiDrawer-paper": {
+                    width: sidebarWidth,
+                    boxSizing: "border-box",
+                    transition: "width 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+                    overflow: "hidden",
+                    borderRight: "1px solid",
+                    borderColor: "divider",
+                    bgcolor: "background.paper",
+                },
             }}
         >
             {/* Logo */}
-            <div className="flex items-center gap-3 px-4 h-16 flex-shrink-0" style={{ borderBottom: "1px solid var(--vm-border)" }}>
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: "linear-gradient(135deg, #5c6bc0, #7c4dff)", boxShadow: "0 2px 8px rgba(92, 107, 192, 0.25)" }}
-                >
-                    <Sparkles className="w-4 h-4 text-white/90" />
-                </div>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, px: 2, height: 64, flexShrink: 0, borderBottom: 1, borderColor: "divider" }}>
+                <Box sx={{
+                    width: 36, height: 36, borderRadius: 2,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    bgcolor: "primary.main", flexShrink: 0,
+                }}>
+                    <Sparkles size={16} color="white" />
+                </Box>
                 <AnimatePresence>
                     {!collapsed && (
                         <motion.div
@@ -69,122 +88,120 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                             exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.2 }}
                         >
-                            <h1 className="text-base font-bold leading-tight">
-                                <span style={{ color: "var(--vm-text-primary)" }}>Vidya</span>
-                                <span className="gradient-text">Mind</span>
-                            </h1>
-                            <p className="text-[10px] leading-tight" style={{ color: "var(--vm-text-muted)" }}>
+                            <Typography variant="subtitle1" fontWeight={700} color="text.primary" lineHeight={1.2}>
+                                VidyaMind
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.625rem" }}>
                                 Cognitive Learning OS
-                            </p>
+                            </Typography>
                         </motion.div>
                     )}
                 </AnimatePresence>
-            </div>
+            </Box>
 
             {/* User Info */}
             {currentUser && !collapsed && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="px-4 py-3 flex-shrink-0"
-                    style={{ borderBottom: "1px solid var(--vm-border)" }}
-                >
-                    <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0"
-                            style={{ background: "var(--vm-accent-muted)", color: "var(--vm-accent)" }}
-                        >
-                            {currentUser.name.charAt(0).toUpperCase()}
-                        </div>
-                        <div className="min-w-0">
-                            <p className="text-xs font-medium truncate" style={{ color: "var(--vm-text-primary)" }}>{currentUser.name}</p>
-                            {exam && (
-                                <p className="text-[10px] truncate" style={{ color: "var(--vm-text-muted)" }}>
-                                    {exam.icon} {exam.shortName}
-                                </p>
-                            )}
-                        </div>
-                    </div>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <Box sx={{ px: 2, py: 1.5, borderBottom: 1, borderColor: "divider" }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                            <Avatar sx={{ width: 32, height: 32, bgcolor: "primary.light", color: "primary.dark", fontSize: "0.75rem", fontWeight: 700 }}>
+                                {currentUser.name.charAt(0).toUpperCase()}
+                            </Avatar>
+                            <Box sx={{ minWidth: 0 }}>
+                                <Typography variant="body2" fontWeight={500} noWrap color="text.primary">
+                                    {currentUser.name}
+                                </Typography>
+                                {exam && (
+                                    <Typography variant="caption" color="text.secondary" noWrap sx={{ display: "block", fontSize: "0.625rem" }}>
+                                        {exam.icon} {exam.shortName}
+                                    </Typography>
+                                )}
+                            </Box>
+                        </Box>
+                    </Box>
                 </motion.div>
             )}
 
             {/* Navigation */}
-            <nav className="flex-1 py-4 px-2 space-y-0.5 overflow-y-auto">
+            <List sx={{ flex: 1, py: 2, px: 1, overflow: "auto" }}>
                 {navItems.map((item) => {
                     const isActive =
                         pathname === item.href ||
                         (item.href !== "/dashboard" && pathname?.startsWith(item.href));
 
                     return (
-                        <Link key={item.href} href={item.href}>
-                            <motion.div
-                                whileHover={{ x: 2, y: -1 }}
-                                whileTap={{ scale: 0.97 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                                className={cn(
-                                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium cursor-pointer relative sidebar-link",
-                                    "transition-colors duration-200",
-                                    isActive
-                                        ? "text-[var(--vm-accent)]"
-                                        : "text-[var(--vm-text-muted)] hover:text-[var(--vm-text-secondary)]"
-                                )}
-                                style={isActive ? {
-                                    background: "var(--vm-accent-muted)",
-                                    boxShadow: "inset 0 0 0 1px rgba(124, 140, 245, 0.08), 0 0 12px rgba(124, 140, 245, 0.04)",
-                                } : {}}
-                            >
-                                <item.icon className={cn("w-[18px] h-[18px] flex-shrink-0", isActive && "text-[var(--vm-accent)]")} />
-                                <AnimatePresence>
+                        <Tooltip key={item.href} title={collapsed ? item.label : ""} placement="right">
+                            <Link href={item.href} style={{ textDecoration: "none" }}>
+                                <ListItemButton
+                                    selected={isActive}
+                                    sx={{
+                                        borderRadius: 2.5,
+                                        mb: 0.5,
+                                        px: collapsed ? 2.5 : 2,
+                                        py: 1,
+                                        minHeight: 42,
+                                        justifyContent: collapsed ? "center" : "flex-start",
+                                        position: "relative",
+                                        "&.Mui-selected": {
+                                            bgcolor: "rgba(124, 140, 245, 0.08)",
+                                            "&:hover": { bgcolor: "rgba(124, 140, 245, 0.12)" },
+                                            "&::before": {
+                                                content: '""',
+                                                position: "absolute",
+                                                left: 0,
+                                                top: "50%",
+                                                transform: "translateY(-50%)",
+                                                width: 3,
+                                                height: 20,
+                                                borderRadius: "0 4px 4px 0",
+                                                bgcolor: "primary.main",
+                                            },
+                                        },
+                                        "&:hover": { bgcolor: "action.hover" },
+                                    }}
+                                >
+                                    <ListItemIcon sx={{
+                                        minWidth: collapsed ? 0 : 36,
+                                        color: isActive ? "primary.main" : "text.secondary",
+                                        justifyContent: "center",
+                                    }}>
+                                        <item.icon size={18} />
+                                    </ListItemIcon>
                                     {!collapsed && (
-                                        <motion.span
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            className="whitespace-nowrap"
-                                        >
-                                            {item.label}
-                                        </motion.span>
+                                        <ListItemText
+                                            primary={item.label}
+                                            primaryTypographyProps={{
+                                                fontSize: "0.8125rem",
+                                                fontWeight: isActive ? 600 : 500,
+                                                color: isActive ? "primary.main" : "text.secondary",
+                                            }}
+                                        />
                                     )}
-                                </AnimatePresence>
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="sidebar-active"
-                                        className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full"
-                                        style={{ background: "var(--vm-accent)" }}
-                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                    />
-                                )}
-                            </motion.div>
-                        </Link>
+                                </ListItemButton>
+                            </Link>
+                        </Tooltip>
                     );
                 })}
-            </nav>
+            </List>
 
-            {/* Bottom: Logout + Collapse */}
-            <div className="flex-shrink-0" style={{ borderTop: "1px solid var(--vm-border)" }}>
+            {/* Bottom */}
+            <Box sx={{ flexShrink: 0, borderTop: 1, borderColor: "divider" }}>
                 {!collapsed && (
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-2.5 w-full px-4 py-2.5 text-xs font-medium transition-colors"
-                        style={{ color: "var(--vm-text-muted)" }}
-                    >
-                        <LogOut className="w-4 h-4" />
-                        Sign Out
-                    </button>
+                    <ListItemButton onClick={handleLogout} sx={{ px: 2, py: 1.5 }}>
+                        <ListItemIcon sx={{ minWidth: 36, color: "text.secondary" }}>
+                            <LogOut size={16} />
+                        </ListItemIcon>
+                        <ListItemText primary="Sign Out" primaryTypographyProps={{ fontSize: "0.75rem", fontWeight: 500, color: "text.secondary" }} />
+                    </ListItemButton>
                 )}
-                <div className="p-2">
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={onToggle}
-                        className="flex items-center justify-center w-full py-2 rounded-lg transition-colors duration-200"
-                        style={{ color: "var(--vm-text-muted)" }}
-                    >
+                <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
+                    <IconButton onClick={onToggle} size="small" sx={{ color: "text.secondary" }}>
                         <motion.div animate={{ rotate: collapsed ? 180 : 0 }} transition={{ duration: 0.3 }}>
-                            <ChevronLeft className="w-4 h-4" />
+                            <ChevronLeft size={16} />
                         </motion.div>
-                    </motion.button>
-                </div>
-            </div>
-        </motion.aside>
+                    </IconButton>
+                </Box>
+            </Box>
+        </Drawer>
     );
 }
